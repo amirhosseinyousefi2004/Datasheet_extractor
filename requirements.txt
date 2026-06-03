@@ -1,8 +1,0 @@
-
-PyQt6
-PyMuPDF
-pytesseract
-Pillow
-sentence-transformers
-openpyxl
-torch

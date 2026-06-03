@@ -1,0 +1,56 @@
+name: Build datasheet reader
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest]
+        python-version: ['3.11']
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller pandas PyQt6 matplotlib numpy openpyxl xlrd PyMuPDF Pillow sentence-transformers torch
+
+    - name: Build with PyInstaller
+      run: |
+        pyinstaller --onefile --windowed `
+          --name "datasheetReader" `
+          --paths ./ `
+          --hidden-import=PySide6 `
+          --hidden-import=pandas `
+          --hidden-import=matplotlib `
+          --collect-all PySide6 `
+          --collect-all matplotlib.backends.backend_qt5agg `
+          main.py
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: datasheetReader-Windows
+        path: dist/datasheetReader.exe
+        if-no-files-found: error
+
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/datasheetReader.exe
+        draft: false
+        prerelease: false
