@@ -41,16 +41,16 @@ jobs:
           main.py
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: datasheetReader-Windows
-        path: dist/datasheetReader.exe
+        path: datasheetReader-Windows.zip
         if-no-files-found: error
 
-    - name: Create Release
+    - name: Create GitHub Release
       if: startsWith(github.ref, 'refs/tags/')
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
-        files: dist/datasheetReader.exe
+        files: datasheetReader-Windows.zip
         draft: false
         prerelease: false
