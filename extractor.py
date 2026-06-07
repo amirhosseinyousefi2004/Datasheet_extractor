@@ -1,6 +1,7 @@
 import json
 import re
 import sys
+import os
 from pathlib import Path
 
 import fitz
@@ -33,6 +34,9 @@ FIELD_DEFINITIONS = {
     "Internal_Material":["lining material","internal material"],
     "Insulation":["insulation","cladding"]
 }
+
+os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 if getattr(sys, "frozen", False):
     BASE_DIR = Path(sys.executable).parent
