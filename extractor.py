@@ -1,5 +1,6 @@
 import json
 import re
+import sys
 from pathlib import Path
 
 import fitz
@@ -33,8 +34,12 @@ FIELD_DEFINITIONS = {
     "Insulation":["insulation","cladding"]
 }
 
+if getattr(sys, "frozen", False):
+    BASE_DIR = Path(sys.executable).parent
+else:
+    BASE_DIR = Path(__file__).resolve().parent
 
-model_path = Path(__file__).parent / "bge-large-en-v1.5"
+model_path = BASE_DIR / "bge-large-en-v1.5"
 
 class DatasheetExtractor:
 
