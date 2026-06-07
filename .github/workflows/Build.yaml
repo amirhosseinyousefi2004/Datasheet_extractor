@@ -26,7 +26,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pyinstaller pandas PyQt6 matplotlib numpy openpyxl xlrd PyMuPDF Pillow sentence-transformers torch
+        pip install pyinstaller pandas PyQt6 matplotlib numpy openpyxl xlrd PyMuPDF Pillow sentence-transformers torch pytesseract
 
     - name: Build with PyInstaller
       run: |
