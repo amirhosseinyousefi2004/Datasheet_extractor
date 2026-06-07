@@ -33,7 +33,7 @@ FIELD_DEFINITIONS = {
     "Insulation":["insulation","cladding"]
 }
 
-
+# /home/amirhossyousefi/models/embedding_models/bge-large-en-v1.5
 model_path = Path(__file__).parent / "bge-large-en-v1.5"
 
 
