@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 
 import fitz
-import pytesseract
+# import pytesseract
 from PIL import Image
 from sentence_transformers import SentenceTransformer, util
 from openpyxl import Workbook
@@ -34,8 +34,8 @@ FIELD_DEFINITIONS = {
 }
 
 # /home/amirhossyousefi/models/embedding_models/bge-large-en-v1.5
-model_path = Path(__file__).parent / "bge-large-en-v1.5"
-
+# model_path = Path(__file__).parent / "bge-large-en-v1.5"
+model_path = Path("/home/amirhossyousefi/models/embedding_models/bge-large-en-v1.5")
 
 class DatasheetExtractor:
 
@@ -144,30 +144,30 @@ class DatasheetExtractor:
                                 "page": page_num
                             })
 
-            if not page_has_text:
-                pix = page.get_pixmap(dpi=300)
-                img_path = "_ocr.png"
-                pix.save(img_path)
+            # if not page_has_text:
+            #     pix = page.get_pixmap(dpi=300)
+            #     img_path = "_ocr.png"
+            #     pix.save(img_path)
 
-                data = pytesseract.image_to_data(
-                    Image.open(img_path),
-                    output_type=pytesseract.Output.DICT
-                )
+            #     data = pytesseract.image_to_data(
+            #         Image.open(img_path),
+            #         output_type=pytesseract.Output.DICT
+            #     )
 
-                for i, txt in enumerate(data["text"]):
-                    txt = txt.strip()
+            #     for i, txt in enumerate(data["text"]):
+            #         txt = txt.strip()
 
-                    if txt:
-                        blocks.append({
-                            "text": txt,
-                            "bbox": (
-                                data["left"][i],
-                                data["top"][i],
-                                data["left"][i] + data["width"][i],
-                                data["top"][i] + data["height"][i]
-                            ),
-                            "page": page_num
-                        })
+            #         if txt:
+            #             blocks.append({
+            #                 "text": txt,
+            #                 "bbox": (
+            #                     data["left"][i],
+            #                     data["top"][i],
+            #                     data["left"][i] + data["width"][i],
+            #                     data["top"][i] + data["height"][i]
+            #                 ),
+            #                 "page": page_num
+            #             })
 
         return blocks
 
