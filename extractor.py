@@ -10,7 +10,9 @@ from PIL import Image
 from openpyxl import Workbook
 
 # ========================================================
-import tqdm
+sys.stderr = open(os.devnull, "w", encoding="utf-8")
+
+import tqdm.std
 
 class NoOpTqdm:
     def __init__(self, iterable=None, *args, **kwargs):
@@ -21,13 +23,13 @@ class NoOpTqdm:
             return iter([])
         return iter(self.iterable)
 
-    def update(self, *args, **kwargs):
-        pass
-
     def close(self):
         pass
 
-tqdm.tqdm = NoOpTqdm
+    def update(self, *args, **kwargs):
+        pass
+
+tqdm.std.tqdm = NoOpTqdm
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
