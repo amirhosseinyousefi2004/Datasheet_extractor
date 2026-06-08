@@ -30,7 +30,7 @@ jobs:
 
     - name: Build with PyInstaller
       run: |
-        pyinstaller --onefile --windowed `
+        pyinstaller --onedir --windowed `
           --name "datasheetReader" `
           --paths ./ `
           --hidden-import=PySide6 `
