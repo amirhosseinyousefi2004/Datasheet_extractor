@@ -12,30 +12,32 @@ from openpyxl import Workbook
 # ========================================================
 sys.stderr = open(os.devnull, "w", encoding="utf-8")
 
-import tqdm.std
+# import tqdm.std
 
-class NoOpTqdm:
-    def __init__(self, iterable=None, *args, **kwargs):
-        self.iterable = iterable
+# class NoOpTqdm:
+#     def __init__(self, iterable=None, *args, **kwargs):
+#         self.iterable = iterable
 
-    def __iter__(self):
-        if self.iterable is None:
-            return iter([])
-        return iter(self.iterable)
+#     def __iter__(self):
+#         if self.iterable is None:
+#             return iter([])
+#         return iter(self.iterable)
 
-    def close(self):
-        pass
+#     def close(self):
+#         pass
 
-    def update(self, *args, **kwargs):
-        pass
+#     def update(self, *args, **kwargs):
+#         pass
 
-tqdm.std.tqdm = NoOpTqdm
+# tqdm.std.tqdm = NoOpTqdm
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
+sys.stderr = open(os.devnull, "w", encoding="utf-8", errors="replace")
 
 from sentence_transformers import SentenceTransformer, util
 
