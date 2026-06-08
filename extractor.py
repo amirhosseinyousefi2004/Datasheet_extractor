@@ -7,8 +7,38 @@ from pathlib import Path
 import fitz
 # import pytesseract
 from PIL import Image
-from sentence_transformers import SentenceTransformer, util
 from openpyxl import Workbook
+
+# ========================================================
+import tqdm
+
+class NoOpTqdm:
+    def __init__(self, iterable=None, *args, **kwargs):
+        self.iterable = iterable
+
+    def __iter__(self):
+        if self.iterable is None:
+            return iter([])
+        return iter(self.iterable)
+
+    def update(self, *args, **kwargs):
+        pass
+
+    def close(self):
+        pass
+
+tqdm.tqdm = NoOpTqdm
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
+from sentence_transformers import SentenceTransformer, util
+
+import traceback
+
 
 FIELDS = [
     "Reference_DataSheet","Tag_number","Equipment","Position",
@@ -48,8 +78,25 @@ model_path = BASE_DIR / "bge-large-en-v1.5"
 class DatasheetExtractor:
 
     def __init__(self):
+        try:
+            self.model = SentenceTransformer(str(model_path))
+        except Exception:
+            with open("error.log", "w", encoding="utf-8") as f:
+                traceback.print_exc(file=f)
+
+                import sys
+                f.write(f"\nstdout={sys.stdout}\n")
+                f.write(f"stderr={sys.stderr}\n")
+
+                if hasattr(sys.stdout, "encoding"):
+                    f.write(f"stdout encoding={sys.stdout.encoding}\n")
+
+                if hasattr(sys.stderr, "encoding"):
+                    f.write(f"stderr encoding={sys.stderr.encoding}\n")
+
+            raise
         self.results = []
-        self.model = SentenceTransformer(str(model_path))
+        # self.model = SentenceTransformer(str(model_path))
 
         self.field_embeddings = {
             k: self.model.encode(v, convert_to_tensor=True)
